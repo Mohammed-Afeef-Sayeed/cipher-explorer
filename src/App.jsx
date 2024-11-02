@@ -8,18 +8,20 @@ import { Routes, Route } from "react-router-dom";
 
 const App = () => {
   return (
-    <div
-      className="min-h-screen bg-[url('./assets/images/bg.jpg')] text-white
-      bg-cover bg-center bg-no-repeat"
-    >
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/learn" element={<Learn />} />
-        <Route path="/practice" element={<Practice />} />
-      </Routes>
-    </div>
+    <>
+      <div
+        className="min-h-screen bg-[url('./assets/images/cipher-gif.gif')] text-white
+        bg-cover bg-center bg-no-repeat"
+      >
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/learn" element={<Learn />} />
+          <Route path="/practice" element={<Practice />} />
+        </Routes>
+      </div>
+    </>
   );
 };
 
