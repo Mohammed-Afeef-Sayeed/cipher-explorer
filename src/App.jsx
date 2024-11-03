@@ -12,7 +12,7 @@ const App = () => {
   return (
     <>
       <div
-        className="absolute w-full min-h-screen bg-[url('./assets/images/cipher-gif.gif')] text-white
+        className="z-0 absolute w-full min-h-screen bg-[url('./assets/images/cipher-gif.gif')] text-white
         bg-cover bg-center bg-no-repeat"
       >
         <Navbar />

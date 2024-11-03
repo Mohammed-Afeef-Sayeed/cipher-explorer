@@ -11,7 +11,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="top-0 fixed w-full">
+    <div className="top-0 fixed w-full z-20">
       <div className="p-4 bg-slate-900 text-white">
         <nav className="flex justify-between items-center">
           <div className="flex md:hidden">
