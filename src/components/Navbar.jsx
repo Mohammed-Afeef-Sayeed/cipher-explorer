@@ -4,14 +4,14 @@ import { FaHamburger } from "react-icons/fa";
 import { IoIosCloseCircle } from "react-icons/io";
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false); 
+  const [isOpen, setIsOpen] = useState(false);
 
   const toggleSidebar = () => {
-    setIsOpen(!isOpen); 
+    setIsOpen(!isOpen);
   };
 
   return (
-    <>
+    <div className="top-0 fixed w-full">
       <div className="p-4 bg-slate-900 text-white">
         <nav className="flex justify-between items-center">
           <div className="flex md:hidden">
@@ -30,13 +30,15 @@ const Navbar = () => {
             <Link to="/practice">Practice</Link>
           </div>
           <div>
-            <button className="bg-green-500 px-2 md:px-4 py-1 md:py-2 text-lg md:text-xl font-bold shadow-lg shadow-green-200 text-black rounded-lg active:scale-[0.8]">
-              Login
-            </button>
+            <Link to="/login">
+              <button className="bg-green-500 px-2 md:px-4 py-1 md:py-2 text-lg md:text-xl font-bold shadow-lg shadow-green-200 text-black rounded-lg active:scale-[0.8]">
+                Login
+              </button>
+            </Link>
           </div>
         </nav>
       </div>
-      
+
       {/* Sidebar */}
       <div className={`fixed top-0 left-0 w-64 h-full bg-slate-800 text-white z-50 shadow-lg transform transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="flex justify-end p-4">
@@ -51,7 +53,7 @@ const Navbar = () => {
       </div>
 
       <hr className="h-10 text-white" />
-    </>
+    </div>
   );
 };
 

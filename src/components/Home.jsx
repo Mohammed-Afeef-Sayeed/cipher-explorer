@@ -2,7 +2,7 @@ import React from "react";
 
 const Home = () => {
   return (
-    <div className="px-4">
+    <div className="px-4 mt-28">
       <div className="px-5 flex justify-center md:justify-end">
         <h1 className="px-10 font-bold text-2xl md:text-3xl lg:text-6xl flex flex-col gap-5 pr-10">
           <span>Unlock</span>
