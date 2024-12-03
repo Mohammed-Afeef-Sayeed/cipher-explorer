@@ -159,14 +159,14 @@ func User(c *fiber.Ctx) error {
 
 	if err != nil || !token.Valid {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-			"message": "unauthorized access",
+			"error": "unauthorized access",
 		})
 	}
 
 	claims, ok := token.Claims.(*jwt.RegisteredClaims)
 	if !ok {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-			"message": "invalid token claims",
+			"error": "invalid token claims",
 		})
 	}
 
@@ -175,7 +175,7 @@ func User(c *fiber.Ctx) error {
 
 	if user.Id == 0 {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-			"message": "user not found",
+			"error": "user not found",
 		})
 	}
 
@@ -187,5 +187,20 @@ func User(c *fiber.Ctx) error {
 
 	return c.JSON(fiber.Map{
 		"user": userResponse,
+	})
+}
+
+func Logout(c *fiber.Ctx) error {
+	cookie := fiber.Cookie{
+		Name:     "jwt",
+		Value:    "",
+		Expires:  time.Now().Add(-time.Hour),
+		HTTPOnly: true,
+	}
+
+	c.Cookie(&cookie)
+
+	return c.JSON(fiber.Map{
+		"message": "Lougout Successfull!",
 	})
 }
