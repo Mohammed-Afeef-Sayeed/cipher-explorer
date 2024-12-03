@@ -81,8 +81,9 @@ func Register(c *fiber.Ctx) error {
 	})
 }
 
+const SecretKey = "secret"
+
 func Login(c *fiber.Ctx) error {
-	const SecretKey = "secret"
 	var req models.User
 	if err := c.BodyParser(&req); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
@@ -146,5 +147,45 @@ func Login(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"message": "Login Successfull!",
 		"user":    successResponse,
+	})
+}
+
+func User(c *fiber.Ctx) error {
+	cookie := c.Cookies("jwt")
+
+	token, err := jwt.ParseWithClaims(cookie, &jwt.RegisteredClaims{}, func(token *jwt.Token) (interface{}, error) {
+		return []byte(SecretKey), nil
+	})
+
+	if err != nil || !token.Valid {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"message": "unauthorized access",
+		})
+	}
+
+	claims, ok := token.Claims.(*jwt.RegisteredClaims)
+	if !ok {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"message": "invalid token claims",
+		})
+	}
+
+	var user models.User
+	database.DB.Where("id = ?", claims.Issuer).First(&user)
+
+	if user.Id == 0 {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"message": "user not found",
+		})
+	}
+
+	userResponse := models.UserResponse{
+		Id:       user.Id,
+		UserName: user.UserName,
+		Email:    user.Email,
+	}
+
+	return c.JSON(fiber.Map{
+		"user": userResponse,
 	})
 }
