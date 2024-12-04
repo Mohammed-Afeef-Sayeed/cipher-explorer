@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaHamburger } from "react-icons/fa";
 import { IoIosCloseCircle } from "react-icons/io";
+import { RiLogoutCircleLine } from "react-icons/ri";
+import axios from "axios";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -9,6 +11,46 @@ const Navbar = () => {
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
+
+
+  const [userName, setUserName] = useState("");
+  const [showTooltip, setShowTooltip] = useState(false);
+
+  useEffect(() => {
+    const authenticate = async () => {
+      try {
+
+        const response = await axios.get("http://localhost:8080/api/user", {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        // console.log(response.data.user.userName);
+        setUserName(response.data.user.userName);
+
+      } catch (error) {
+        console.log(error);
+        alert(error.response.data.error + " please login");
+        // setUserName("");
+      }
+    }
+    authenticate();
+  }, [userName])
+
+  const logout = async () => {
+    try {
+      const response = await axios.post("http://localhost:8080/api/logout",{}, {
+        withCredentials: true,
+      })
+      console.log(response);
+      alert(response.data.message);
+      setUserName("");
+    } catch (error) {
+      console.log(error);
+      alert(error.response?.data?.error || "Logout failed");
+    }
+  }
 
   return (
     <div className="top-0 fixed w-full z-20">
@@ -21,7 +63,7 @@ const Navbar = () => {
             to="/"
             className="text-[20px] md:text-[23px] font-bold bg-white px-2 md:px-4 py-1 md:py-2 rounded-t-lg border-red-500 border-x-4 border-y-2 text-black"
           >
-            <h1 className="">Logo</h1>
+            <h1 className="">C1PH3R</h1>
           </Link>
           <div className="hidden md:flex gap-7 text-lg font-bold">
             <Link to="/">Home</Link>
@@ -29,12 +71,28 @@ const Navbar = () => {
             <Link to="/learn">Learn</Link>
             <Link to="/practice">Practice</Link>
           </div>
-          <div>
-            <Link to="/login">
-              <button className="bg-green-500 px-2 md:px-4 py-1 md:py-2 text-lg md:text-xl font-bold shadow-lg shadow-green-200 text-black rounded-lg active:scale-[0.8]">
-                Login
-              </button>
-            </Link>
+          <div className="flex gap-3 items-center justify-center">
+            {userName.length === 0 ?
+              <Link to="/login">
+                <button className="bg-green-500 px-2 md:px-4 py-1 md:py-2 text-lg md:text-xl font-bold shadow-lg shadow-green-200 text-black rounded-lg active:scale-[0.8]">
+                  Login
+                </button>
+              </Link> :
+              <>
+                <p className="text-green-500 px-2 md:px-4 py-1 md:py-2 text-lg md:text-xl font-bold">{userName}</p>
+                <RiLogoutCircleLine
+                  className="text-red-500 text-lg md:text-xl font-extrabold cursor-pointer"
+                  onMouseEnter={() => setShowTooltip(true)} 
+                  onMouseLeave={() => setShowTooltip(false)}
+                  onClick={() => logout()}
+                />
+                {showTooltip && (
+                  <div className="absolute rounded-lg bg-red-300 text-black p-2 mt-[80px] ml-[90px] text-sm font-bold">
+                    Logout
+                  </div>
+                )}
+              </>
+            }
           </div>
         </nav>
       </div>
