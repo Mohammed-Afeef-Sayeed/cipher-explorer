@@ -1,8 +1,42 @@
-import React from 'react';
+import axios from 'axios';
+import React, { useState } from 'react';
 import { MdSecurity } from "react-icons/md";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Signup = () => {
+
+  const [userName, setUserName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // console.log(userName, email, password)
+
+    try {
+      const payload = {
+        userName,
+        email,
+        password,
+      };
+
+      const response = await axios.post("http://localhost:8080/api/register", payload);
+      console.log(response);
+      console.log(response.data)
+      setUserName("");
+      setEmail("");
+      setPassword("");
+      alert("Signup Successfull!!")
+      navigate("/login")
+
+    } catch (error) {
+      console.log(error);
+      alert(error.response.data.error)
+    }
+
+  }
+
   return (
     <div className="flex flex-col lg:flex-row min-h-screen text-white bg-black">
       {/* Left Side - Image */}
@@ -17,7 +51,7 @@ const Signup = () => {
             <MdSecurity className="text-5xl text-green-500 mb-4 animate-pulse" />
             <h2 className="text-3xl font-semibold">Signup</h2>
           </div>
-          <form className="space-y-5">
+          <form onSubmit={(e) => handleSubmit(e)} className="space-y-5">
             <div>
               <label htmlFor="username" className="block text-gray-400 font-semibold">
                 Username
@@ -27,6 +61,8 @@ const Signup = () => {
                 id="username"
                 className="w-full p-3 border border-gray-700 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
                 placeholder="Enter your username"
+                onChange={(e) => setUserName(e.target.value)}
+                value={userName}
               />
             </div>
             <div>
@@ -38,6 +74,8 @@ const Signup = () => {
                 id="email"
                 className="w-full p-3 border border-gray-700 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
                 placeholder="Enter your email"
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
               />
             </div>
             <div>
@@ -49,6 +87,8 @@ const Signup = () => {
                 id="password"
                 className="w-full p-3 border border-gray-700 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
                 placeholder="Enter your password"
+                onChange={(e) => setPassword(e.target.value)}
+                value={password}
               />
             </div>
             <button
