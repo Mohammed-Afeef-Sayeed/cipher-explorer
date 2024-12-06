@@ -4,6 +4,7 @@ import { FaHamburger } from "react-icons/fa";
 import { IoIosCloseCircle } from "react-icons/io";
 import { RiLogoutCircleLine } from "react-icons/ri";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -31,7 +32,7 @@ const Navbar = () => {
 
       } catch (error) {
         console.log(error);
-        alert(error.response.data.error + " please login");
+        toast.error(error.response.data.error + " please login");
         // setUserName("");
       }
     }
@@ -44,11 +45,11 @@ const Navbar = () => {
         withCredentials: true,
       })
       console.log(response);
-      alert(response.data.message);
+      toast.success(response.data.message);
       setUserName("");
     } catch (error) {
       console.log(error);
-      alert(error.response?.data?.error || "Logout failed");
+      toast.error(error.response?.data?.error || "Logout failed");
     }
   }
 

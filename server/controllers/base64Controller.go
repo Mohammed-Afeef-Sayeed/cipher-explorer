@@ -19,6 +19,12 @@ func ConvertBase64ToText(c *fiber.Ctx) error {
 		})
 	}
 
+	if len(req.Base64) == 0 {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Please Enter Base64 text",
+		})
+	}
+
 	decoded, err := base64.StdEncoding.DecodeString(req.Base64)
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
@@ -43,6 +49,12 @@ func ConvertTextToBase64(c *fiber.Ctx) error {
 		})
 	}
 
+	if len(req.Text) == 0 {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Please enter text",
+		})
+	}
+
 	encoded := base64.StdEncoding.EncodeToString([]byte(req.Text))
 	return c.JSON(fiber.Map{
 		"base64": encoded,
@@ -58,6 +70,12 @@ func HashText(c *fiber.Ctx) error {
 	if err := c.BodyParser(req); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": "Invalid request body",
+		})
+	}
+
+	if len(req.Text) == 0 {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Please enter text",
 		})
 	}
 
@@ -83,6 +101,18 @@ func VerifyHash(c *fiber.Ctx) error {
 	if err := c.BodyParser(req); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": "Invalid request body",
+		})
+	}
+
+	if len(req.Text) == 0 {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Please enter text",
+		})
+	}
+
+	if len(req.Hash) == 0 {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Please enter Hash Value",
 		})
 	}
 

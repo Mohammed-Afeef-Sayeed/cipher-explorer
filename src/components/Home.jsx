@@ -11,7 +11,7 @@ const Home = () => {
       </div>
       <div className="md:px-10 mt-52 py-10 flex sm:justify-start md:justify-normal md:w-[450px]">
         <h2 className="font-bold text-2xl md:text-4xl ml-7">
-          Master the Art of Encryption and Decryption with Interactive Lessons
+          Master the Art of Encryption and Decryption with Interactive 
           and Real-Time Cipher Identification.
         </h2>
       </div>

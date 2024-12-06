@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { MdSecurity } from "react-icons/md";
 import { Link, useNavigate } from 'react-router-dom';
+import toast from "react-hot-toast";
 
 const Signup = () => {
 
@@ -27,12 +28,12 @@ const Signup = () => {
       setUserName("");
       setEmail("");
       setPassword("");
-      alert("Signup Successfull!!")
+      toast.success("Signup Successfull!!")
       navigate("/login")
 
     } catch (error) {
       console.log(error);
-      alert(error.response.data.error)
+      toast.error(error.response.data.error)
     }
 
   }

@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 // import { FaLock } from "react-icons/fa";
 import { MdSecurity } from "react-icons/md";
 import { Link, useNavigate } from 'react-router-dom';
+import toast from "react-hot-toast";
 
 const Login = () => {
 
@@ -34,13 +35,13 @@ const Login = () => {
       setEmail("");
       setPassword("");
       console.log(response);
-      alert(response.data.message);
+      toast.success(response.data.message);
       console.log(response.data.user);
       navigate("/");
 
     } catch (error) {
       console.log(error);
-      alert(error.response.data.error);
+      toast.error(error.response.data.error);
     }
   }
 
