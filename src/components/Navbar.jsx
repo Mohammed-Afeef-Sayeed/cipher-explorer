@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaHamburger } from "react-icons/fa";
 import { IoIosCloseCircle } from "react-icons/io";
 import { RiLogoutCircleLine } from "react-icons/ri";
@@ -9,14 +9,11 @@ import toast from "react-hot-toast";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const toggleSidebar = () => {
-    setIsOpen(!isOpen);
-  };
-
-
+  const navigate = useNavigate();
+  
   const [userName, setUserName] = useState("");
   const [showTooltip, setShowTooltip] = useState(false);
-
+  
   useEffect(() => {
     const authenticate = async () => {
       try {
@@ -29,15 +26,31 @@ const Navbar = () => {
         })
         // console.log(response.data.user.userName);
         setUserName(response.data.user.userName);
-
+        
       } catch (error) {
         console.log(error);
         toast.error(error.response.data.error + " please login");
-        // setUserName("");
+        setUserName("");
       }
     }
     authenticate();
-  }, [userName])
+  }, [])
+  
+  const toggleSidebar = (check) => {
+    if(check === "/practice" && userName.length === 0) {
+      toast.error("Login to access Practice")
+      setTimeout(() => navigate("/login"), 100);
+      return;
+    }
+    setIsOpen(!isOpen);
+  };
+
+  const checkAuth = () => {
+    if(userName.length === 0) {
+      toast.error("Login to access Practice")
+      setTimeout(() => navigate("/login"), 100);
+    }
+  }
 
   const logout = async () => {
     try {
@@ -70,7 +83,7 @@ const Navbar = () => {
             <Link to="/">Home</Link>
             <Link to="/about">About</Link>
             <Link to="/learn">Learn</Link>
-            <Link to="/practice">Practice</Link>
+            <Link to="/practice" onClick={() => checkAuth()}>Practice</Link>
           </div>
           <div className="flex gap-3 items-center justify-center">
             {userName.length === 0 ?
@@ -104,10 +117,10 @@ const Navbar = () => {
           <IoIosCloseCircle className="text-3xl cursor-pointer" onClick={toggleSidebar} />
         </div>
         <div className="flex flex-col items-center mt-16">
-          <Link to="/" className="py-2 text-lg font-bold" onClick={toggleSidebar}>Home</Link>
-          <Link to="/about" className="py-2 text-lg font-bold" onClick={toggleSidebar}>About</Link>
-          <Link to="/learn" className="py-2 text-lg font-bold" onClick={toggleSidebar}>Learn</Link>
-          <Link to="/practice" className="py-2 text-lg font-bold" onClick={toggleSidebar}>Practice</Link>
+          <Link to="/" className="py-2 text-lg font-bold" onClick={() => toggleSidebar("/")}>Home</Link>
+          <Link to="/about" className="py-2 text-lg font-bold" onClick={() => toggleSidebar("/about")}>About</Link>
+          <Link to="/learn" className="py-2 text-lg font-bold" onClick={() => toggleSidebar("/learn")}>Learn</Link>
+          <Link to="/practice" className="py-2 text-lg font-bold" onClick={() => toggleSidebar("/practice")}>Practice</Link>
         </div>
       </div>
 
